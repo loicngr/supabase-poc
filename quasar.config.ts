@@ -101,7 +101,8 @@ export default configure((/* ctx */) => {
 
       // Quasar plugins
       plugins: [
-        'Loading'
+        'Loading',
+        'Notify'
       ]
     },
 

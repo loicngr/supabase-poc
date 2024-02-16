@@ -13,11 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { createClient } from '@supabase/supabase-js'
 import ListItems from 'components/ListItems.vue'
+import { useMainStore } from 'stores/main'
+import { storeToRefs } from 'pinia'
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-)
+const mainStore = useMainStore()
+
+const {
+  client: supabase
+} = storeToRefs(mainStore)
 </script>

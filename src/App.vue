@@ -2,6 +2,9 @@
   <router-view />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
+import { useMainStore } from 'stores/main'
 
+const mainStore = useMainStore()
+mainStore.createClient()
 </script>

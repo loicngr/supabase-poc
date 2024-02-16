@@ -3,10 +3,13 @@ import {
   createMemoryHistory,
   createRouter,
   createWebHashHistory,
-  createWebHistory
+  createWebHistory,
+  NavigationGuardNext,
+  RouteLocationNormalized
 } from 'vue-router'
 
 import routes from './routes'
+import { useUserStore } from 'stores/user'
 
 /*
  * If not building with SSR mode, you can
@@ -22,7 +25,7 @@ export default route(function (/* { store, ssrContext } */) {
     ? createMemoryHistory
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
 
-  const Router = createRouter({
+  const router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
@@ -32,5 +35,26 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  return Router
+  router.beforeEach((
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    const userStore = useUserStore()
+
+    if (
+      to.name !== 'login' &&
+      typeof userStore.data === 'undefined'
+    ) {
+      next({
+        name: 'login'
+      })
+
+      return
+    }
+
+    next()
+  })
+
+  return router
 })
